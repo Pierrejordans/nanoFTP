@@ -1,0 +1,218 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NanoFTP.ViewModels"
+        x:Class="NanoFTP.Views.ConnectionEditorWindow"
+        x:DataType="vm:ConnectionEditorViewModel"
+        Title="NanoFTP — Connexion"
+        Width="610"
+        Height="740"
+        MinHeight="560"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource CanvasBrush}"
+        UseLayoutRounding="True">
+
+  <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+    <Grid Grid.Row="0" Margin="26,22,26,14" ColumnDefinitions="Auto,*">
+      <Border Width="42" Height="42" CornerRadius="12" Background="{StaticResource AccentSoftBrush}" VerticalAlignment="Top">
+        <PathIcon Data="{StaticResource IconCloud}" Width="21" Height="21" Foreground="{StaticResource AccentBrush}" />
+      </Border>
+      <StackPanel Grid.Column="1" Margin="13,0,0,0" Spacing="3">
+        <TextBlock Text="{Binding Heading}" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}" />
+        <TextBlock Text="{Binding Description}" FontSize="11.5" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" />
+      </StackPanel>
+    </Grid>
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Margin="26,4,26,20" Spacing="18">
+
+        <StackPanel Spacing="10">
+          <TextBlock Text="IDENTIFICATION" Classes="section-label" />
+          <StackPanel Spacing="4">
+            <TextBlock Text="Nom de la connexion" Classes="field-label" />
+            <TextBox x:Name="NameBox"
+                     Classes="field"
+                     Classes.invalid="{Binding HasNameError}"
+                     Text="{Binding Name, Mode=TwoWay}"
+                     Watermark="Ex. Mon site, Atelier, Serveur perso…"
+                     AutomationProperties.Name="Nom de la connexion" />
+            <TextBlock Text="{Binding NameError}" Classes="error-text" IsVisible="{Binding HasNameError}" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,112" ColumnSpacing="10">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Hôte" Classes="field-label" />
+              <TextBox x:Name="HostBox"
+                       Classes="field"
+                       Classes.invalid="{Binding HasHostError}"
+                       Text="{Binding Host, Mode=TwoWay}"
+                       Watermark="ftp.example.com"
+                       AutomationProperties.Name="Hôte" />
+              <TextBlock Text="{Binding HostError}" Classes="error-text" IsVisible="{Binding HasHostError}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="4">
+              <TextBlock Text="Port" Classes="field-label" />
+              <TextBox x:Name="PortBox"
+                       Classes="field"
+                       Classes.invalid="{Binding HasPortError}"
+                       Text="{Binding PortText, Mode=TwoWay}"
+                       Watermark="21"
+                       MaxLength="5"
+                       AutomationProperties.Name="Port" />
+              <TextBlock Text="{Binding PortError}" Classes="error-text" IsVisible="{Binding HasPortError}" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+
+        <StackPanel Spacing="10">
+          <TextBlock Text="AUTHENTIFICATION" Classes="section-label" />
+          <StackPanel Spacing="4">
+            <TextBlock Text="Nom d'utilisateur" Classes="field-label" />
+            <TextBox Classes="field"
+                     Text="{Binding Username, Mode=TwoWay}"
+                     Watermark="Laissez vide pour une connexion anonyme"
+                     AutomationProperties.Name="Nom d'utilisateur" />
+          </StackPanel>
+          <StackPanel Spacing="4">
+            <TextBlock Text="Mot de passe" Classes="field-label" />
+            <Grid>
+              <TextBox x:Name="PasswordBox"
+                       Classes="field"
+                       Text="{Binding Password, Mode=TwoWay}"
+                       PasswordChar="●"
+                       Watermark="Mot de passe"
+                       Padding="11,7,42,7"
+                       AutomationProperties.Name="Mot de passe" />
+              <Button x:Name="RevealButton"
+                      Classes="icon"
+                      Width="30"
+                      Height="30"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Center"
+                      Margin="0,0,4,0"
+                      Click="RevealPassword_Click"
+                      ToolTip.Tip="Afficher le mot de passe"
+                      AutomationProperties.Name="Afficher le mot de passe">
+                <PathIcon Data="{StaticResource IconEye}" Width="14" Height="14" />
+              </Button>
+            </Grid>
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Spacing="10">
+          <TextBlock Text="SÉCURITÉ" Classes="section-label" />
+          <Border Background="{StaticResource SurfaceMutedBrush}"
+                  BorderBrush="{StaticResource BorderBrush}"
+                  BorderThickness="1"
+                  CornerRadius="10"
+                  Padding="14,12">
+            <StackPanel Spacing="10">
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="2">
+                  <TextBlock Text="FTPS · TLS explicite" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}" />
+                  <TextBlock Text="Chiffre la connexion et les transferts." Classes="helper" />
+                </StackPanel>
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding UseTls, Mode=TwoWay}"
+                              VerticalAlignment="Center"
+                              OnContent=""
+                              OffContent=""
+                              AutomationProperties.Name="FTPS explicite" />
+              </Grid>
+              <StackPanel IsVisible="{Binding UseTls}" Spacing="5">
+                <CheckBox IsChecked="{Binding AllowInvalidCertificate, Mode=TwoWay}"
+                          Content="Autoriser un certificat non vérifié"
+                          FontSize="11.5"
+                          AutomationProperties.Name="Autoriser un certificat non vérifié" />
+                <TextBlock Text="À utiliser uniquement avec un serveur de confiance disposant d'un certificat auto-signé."
+                           Classes="helper"
+                           Margin="24,0,0,0" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <StackPanel Spacing="10">
+          <TextBlock Text="SESSION" Classes="section-label" />
+          <StackPanel Spacing="4">
+            <TextBlock Text="Dossier distant de départ" Classes="field-label" />
+            <TextBox Classes="field"
+                     Text="{Binding StartPath, Mode=TwoWay}"
+                     Watermark="Laissez vide pour le dossier par défaut du serveur"
+                     AutomationProperties.Name="Dossier distant de départ" />
+            <TextBlock Text="Par exemple : /www ou /home/utilisateur" Classes="helper" />
+          </StackPanel>
+        </StackPanel>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <Border Grid.Row="2"
+            Classes="notice"
+            Classes.success="{Binding TestSucceededValue}"
+            Classes.error="{Binding TestFailedValue}"
+            IsVisible="{Binding HasTestMessage}"
+            Margin="26,0,26,10">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <PathIcon Data="{StaticResource IconCheck}"
+                  Width="14" Height="14"
+                  Foreground="{StaticResource SuccessBrush}"
+                  IsVisible="{Binding TestSucceededValue}"
+                  VerticalAlignment="Center" />
+        <PathIcon Data="{StaticResource IconWarning}"
+                  Width="14" Height="14"
+                  Foreground="{StaticResource DangerBrush}"
+                  IsVisible="{Binding TestFailedValue}"
+                  VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1"
+                   Margin="8,0,8,0"
+                   Text="{Binding TestMessage}"
+                   FontSize="11"
+                   TextWrapping="Wrap"
+                   Foreground="{StaticResource InkSecondaryBrush}"
+                   VerticalAlignment="Center" />
+        <ProgressBar Grid.Column="2"
+                     IsIndeterminate="True"
+                     Width="58"
+                     IsVisible="{Binding IsTesting}"
+                     VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="3"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="0,1,0,0"
+            Background="{StaticResource SurfaceBrush}"
+            Padding="20,14">
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="8">
+        <Button x:Name="DeleteButton"
+                Classes="danger"
+                Content="Supprimer"
+                Click="Delete_Click"
+                IsVisible="{Binding CanDelete}"
+                VerticalAlignment="Center" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Button Classes="secondary"
+                  Content="{Binding TestButtonLabel}"
+                  IsEnabled="{Binding CanRunTest}"
+                  Click="Test_Click"
+                  MinWidth="82" />
+        </StackPanel>
+        <Button Grid.Column="3"
+                Classes="secondary"
+                Content="Annuler"
+                Click="Cancel_Click"
+                IsCancel="True"
+                MinWidth="88" />
+        <Button Grid.Column="4"
+                Classes="primary"
+                Content="{Binding PrimaryLabel}"
+                Click="Save_Click"
+                IsDefault="True"
+                MinWidth="150" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

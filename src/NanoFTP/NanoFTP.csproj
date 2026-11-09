@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>NanoFTP</AssemblyName>
+    <RootNamespace>NanoFTP</RootNamespace>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/nanoftp.ico</ApplicationIcon>
+    <!-- Dans un dossier de travail marqué Low integrity, l'apphost généré serait lancé
+         avec un jeton bas et ne pourrait pas écrire sur le Bureau. On passe par dotnet. -->
+    <UseAppHost>false</UseAppHost>
+    <Product>NanoFTP</Product>
+    <Description>Un client FTP simple et soigné.</Description>
+    <Version>1.0.0</Version>
+    <Authors>NanoFTP</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <PackageReference Include="Avalonia" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.22" />
+    <PackageReference Include="FluentFTP" Version="55.1.0" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.22" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+</Project>

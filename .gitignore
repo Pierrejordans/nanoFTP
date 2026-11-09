@@ -1,0 +1,14 @@
+bin/
+obj/
+artifacts/
+.tools/
+.scratch/
+.nanoftp-data/
+NanoFTP-downloads/
+.sign-test/
+.verify-sign/
+*.user
+*.suo
+.vs/
+.idea/
+.DS_Store
